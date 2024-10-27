@@ -26,8 +26,18 @@ async function run() {
         // Connect the client to the server	(optional starting in v4.7)
         // await client.connect();
 
-        app.get('/menuItems', async (req, res) => {
+        const database = client.db('restaurantDB');
+        const menuCollection = database.collection('menuItems');
 
+        /*------------------------------------------------ 
+                Menu Collection API
+        -------------------------------------------------*/
+
+        // Get all menu items 
+        app.get('/menuItems', async (req, res) => {
+            const cursor = menuCollection.find();
+            const result = await cursor.toArray();
+            res.send(result);
         });
 
         // Send a ping to confirm a successful connection
