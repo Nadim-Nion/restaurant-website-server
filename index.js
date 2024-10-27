@@ -28,6 +28,7 @@ async function run() {
 
         const database = client.db('restaurantDB');
         const menuCollection = database.collection('menuItems');
+        const cartCollection = database.collection('cartItems');
 
         /*------------------------------------------------ 
                 Menu Collection API
@@ -37,6 +38,17 @@ async function run() {
         app.get('/menuItems', async (req, res) => {
             const cursor = menuCollection.find();
             const result = await cursor.toArray();
+            res.send(result);
+        });
+
+        /*--------------------------------------------- 
+                Cart Collection API
+        ----------------------------------------------*/
+
+        // Store cart data 
+        app.post('/cartItems', async (req, res) => {
+            const cart = req.body;
+            const result = await cartCollection.insertOne(cart);
             res.send(result);
         });
 
