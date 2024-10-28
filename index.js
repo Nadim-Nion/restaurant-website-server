@@ -7,6 +7,7 @@ const port = process.env.PORT || 5000;
 
 // Middlewares
 app.use(cors());
+app.use(express.json());
 
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.qf8hqc8.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
@@ -44,6 +45,13 @@ async function run() {
         /*--------------------------------------------- 
                 Cart Collection API
         ----------------------------------------------*/
+
+        // Get all cart data
+        app.get('/cartItems', async (req, res) => {
+            const cursor = cartCollection.find();
+            const result = await cursor.toArray();
+            res.send(result);
+        });
 
         // Store cart data 
         app.post('/cartItems', async (req, res) => {
