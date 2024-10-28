@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const app = express();
 const port = process.env.PORT || 5000;
 
@@ -57,6 +57,20 @@ async function run() {
         app.post('/cartItems', async (req, res) => {
             const cart = req.body;
             const result = await cartCollection.insertOne(cart);
+            res.send(result);
+        });
+
+        // Update the quantity of a cart data
+        app.patch('/cartItems/:id', async (req, res) => {
+            const id = req.params.id;
+            const { quantity } = req.body;
+            const filter = { _id: new ObjectId(id) };
+            const updatedCart = {
+                $set: {
+                    quantity: quantity
+                }
+            };
+            const result = await cartCollection.updateOne(filter, updatedCart);
             res.send(result);
         });
 
